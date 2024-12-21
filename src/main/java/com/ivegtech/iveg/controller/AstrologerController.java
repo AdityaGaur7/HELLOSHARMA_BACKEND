@@ -1,46 +1,43 @@
 package com.ivegtech.iveg.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.ivegtech.iveg.dto.AstrologerUpdateRequestDto;
+import com.ivegtech.iveg.entity.User;
+import com.ivegtech.iveg.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import com.ivegtech.iveg.entity.Astrologer;
-import com.ivegtech.iveg.service.AstrologerService;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/astrologers")
+@RequestMapping("/api/v1/astrologers")
 public class AstrologerController {
 
-    @Autowired
-    private AstrologerService astrologerService;
+    private final UserService userService;
 
+    public AstrologerController(UserService userService) {
+        this.userService = userService;
+    }
+
+    // Get all astrologers
     @GetMapping
-    public List<Astrologer> getAllAstrologers() {
-        return astrologerService.getAllAstrologers();
+    public ResponseEntity<List<User>> getAllAstrologers() {
+        List<User> astrologers = userService.getAstrologersByRoleId(3L); // Fetch astrologers by role ID
+        return ResponseEntity.ok(astrologers);
     }
+ 
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Astrologer> getAstrologerById(@PathVariable Long id) {
-        return astrologerService.getAstrologerById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
-
-    @PostMapping
-    public Astrologer addAstrologer(@RequestBody Astrologer astrologer) {
-        return astrologerService.addAstrologer(astrologer);
-    }
-
+    // Update astrologer details
     @PutMapping("/{id}")
-    public ResponseEntity<Astrologer> updateAstrologer(@PathVariable Long id, @RequestBody Astrologer astrologerDetails) {
-        return ResponseEntity.ok(astrologerService.updateAstrologer(id, astrologerDetails));
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAstrologer(@PathVariable Long id) {
-        astrologerService.deleteAstrologer(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<String> updateAstrologerDetails(
+            @PathVariable Long id,
+            @RequestBody AstrologerUpdateRequestDto updateRequest) {
+        try {
+            userService.updateAstrologerDetails(id, updateRequest);
+            return ResponseEntity.ok("Astrologer details updated successfully.");
+        } catch (IllegalStateException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("An unexpected error occurred.");
+        }
     }
 }

@@ -1,11 +1,10 @@
 package com.ivegtech.iveg.controller;
 
+import com.ivegtech.iveg.entity.AstroStore;
+import com.ivegtech.iveg.service.AstroStoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import com.ivegtech.iveg.entity.AstroStore;
-import com.ivegtech.iveg.service.AstroStoreService;
 
 import java.util.List;
 
@@ -16,31 +15,48 @@ public class AstroStoreController {
     @Autowired
     private AstroStoreService astroStoreService;
 
+    // Get all AstroStore items
     @GetMapping
-    public List<AstroStore> getAllProducts() {
-        return astroStoreService.getAllProducts();
+    public List<AstroStore> getAllAstroStores() {
+        return astroStoreService.getAllAstroStores();
     }
 
+    // Get a single AstroStore item by ID
     @GetMapping("/{id}")
-    public ResponseEntity<AstroStore> getProductById(@PathVariable Long id) {
-        AstroStore product = astroStoreService.getProductById(id);
-        return ResponseEntity.ok(product);
+    public ResponseEntity<AstroStore> getAstroStoreById(@PathVariable Long id) {
+        return astroStoreService.getAstroStoreById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
+    // Add a new AstroStore item
     @PostMapping
-    public AstroStore createProduct(@RequestBody AstroStore product) {
-        return astroStoreService.createProduct(product);
+    public ResponseEntity<AstroStore> createAstroStore(@RequestBody AstroStore astroStore) {
+        AstroStore savedAstroStore = astroStoreService.addAstroStore(astroStore);
+        return ResponseEntity.ok(savedAstroStore);
     }
 
+    // Update an existing AstroStore item
     @PutMapping("/{id}")
-    public ResponseEntity<AstroStore> updateProduct(@PathVariable Long id, @RequestBody AstroStore productDetails) {
-        AstroStore updatedProduct = astroStoreService.updateProduct(id, productDetails);
-        return ResponseEntity.ok(updatedProduct);
+    public ResponseEntity<AstroStore> updateAstroStore(
+            @PathVariable Long id,
+            @RequestBody AstroStore astroStoreDetails) {
+        try {
+            AstroStore updatedAstroStore = astroStoreService.updateAstroStore(id, astroStoreDetails);
+            return ResponseEntity.ok(updatedAstroStore);
+        } catch (RuntimeException ex) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
+    // Delete an AstroStore item
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
-        astroStoreService.deleteProduct(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<Void> deleteAstroStore(@PathVariable Long id) {
+        try {
+            astroStoreService.deleteAstroStore(id);
+            return ResponseEntity.noContent().build();
+        } catch (RuntimeException ex) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

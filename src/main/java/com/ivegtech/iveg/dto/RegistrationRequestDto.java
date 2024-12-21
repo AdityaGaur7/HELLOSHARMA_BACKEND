@@ -8,6 +8,7 @@ public class RegistrationRequestDto {
     private String lastName;
     private String password;
     private String phone;
+    private String role;
     
     
 	
@@ -16,13 +17,22 @@ public class RegistrationRequestDto {
 		// TODO Auto-generated constructor stub
 	}
 
-	public RegistrationRequestDto(String email, String firstName, String lastName, String password, String phone) {
+	public RegistrationRequestDto(String email, String firstName, String lastName, String password, String phone,String role) {
 		super();
 		this.email = email;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.password = password;
 		this.phone = phone;
+		this.role = role;
+	}
+   
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
 	}
 
 	public String getEmail() {

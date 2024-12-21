@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.ivegtech.iveg.dto.MyUserDetails;
+import com.ivegtech.iveg.entity.Role;
 import com.ivegtech.iveg.entity.User;
 import com.ivegtech.iveg.repo.UserRepo;
 
@@ -32,6 +33,9 @@ public class CustomUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("User not found with email or phone number: " + username);
         }
 
-        return new MyUserDetails(user.get());
+        Role role = user.get().getRole();  // Correctly accessing the Role
+
+        // Return MyUserDetails with the user and its associated role
+        return new MyUserDetails(user.get(), role);
     }
 }

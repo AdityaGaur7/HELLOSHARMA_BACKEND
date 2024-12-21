@@ -10,13 +10,13 @@ public class Pooja {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
-    private String type; // e.g., 'Homa', 'Puja', etc.
+    private String title;
     private String description;
-    private double price;
+    private String date; // Using String for simplicity; change to LocalDate if needed
+    private String image;
+    private String link;
 
     // Getters and Setters
-
     public Long getId() {
         return id;
     }
@@ -25,20 +25,12 @@ public class Pooja {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getDescription() {
@@ -49,12 +41,27 @@ public class Pooja {
         this.description = description;
     }
 
-    public double getPrice() {
-        return price;
+    public String getDate() {
+        return date;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
     }
 }
-

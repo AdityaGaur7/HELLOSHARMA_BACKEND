@@ -1,19 +1,18 @@
 package com.ivegtech.iveg.entity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.SequenceGenerator;
-import jakarta.persistence.Table;
 
+import jakarta.persistence.*;
 import java.io.Serializable;
 
 @Entity
 @Table(name = "user_details", schema = "public")
 public class User implements Serializable {
 
-    @Id
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_details_seq")
     @SequenceGenerator(name = "user_details_seq", sequenceName = "user_details_id_seq", allocationSize = 1)
     private Long id;
@@ -32,91 +31,170 @@ public class User implements Serializable {
 
     @Column(name = "phone", length = 255, nullable = false)
     private String phone;
-    
-  
-	@Column(name = "is_enabled", nullable = false)
+
+    @Column(name = "is_enabled", nullable = false)
     private boolean isEnabled;
 
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "role_id", nullable = false)
+    private Role role;
+
+    // Astrologer-specific attributes
+    private String expertise;
+    private String languages;
+    private String experience;
+    private String  orders;
+    private String price;
+    private String  rating;
+    private String status;
+    private String imageUrl;
+
+    
     // Constructors, Getters, Setters, and toString() methods
 
-    public User() {
-    }
+    public User() {}
 
-    public User(String email, String firstName, String lastName, String password, String phone, boolean isEnabled) {
+    public User(String email, String firstName, String lastName, String password, String phone, boolean isEnabled, Role role) {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
         this.phone = phone;
         this.isEnabled = isEnabled;
+        this.role = role;
     }
+
+    // Getters and Setters for common fields
 
     public Long getId() {
-        return id;
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public boolean isEnabled() {
+		return isEnabled;
+	}
+
+	public void setEnabled(boolean isEnabled) {
+		this.isEnabled = isEnabled;
+	}
+
+	public Role getRole() {
+        return role;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setRole(Role role) {
+        this.role = role;
     }
 
-    public String getEmail() {
-        return email;
+    // Getters and Setters for Astrologer-specific attributes
+    // (Only used if role == Role.ASTROLOGER)
+
+    public String getExpertise() {
+        return expertise;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setExpertise(String expertise) {
+        this.expertise = expertise;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getLanguages() {
+        return languages;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setLanguages(String languages) {
+        this.languages = languages;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getExperience() {
+        return experience;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setExperience(String experience) {
+        this.experience = experience;
     }
 
-    public String getPassword() {
-        return password;
+    public String  getOrders() {
+        return orders;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setOrders(String  orders) {
+        this.orders = orders;
     }
 
-    public String getPhone() {
-        return phone;
+    public String getPrice() {
+        return price;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setPrice(String price) {
+        this.price = price;
     }
 
-    public boolean isEnabled() {
-        return isEnabled;
+    public String  getRating() {
+        return rating;
     }
 
-    public void setEnabled(boolean enabled) {
-        isEnabled = enabled;
+    public void setRating(String  rating) {
+        this.rating = rating;
     }
 
-    @Override
-    public String toString() {
-        return "UserDetails{" +
-                "id=" + id +
-                ", email='" + email + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", password='" + password + '\'' +
-                ", phone='" + phone + '\'' +
-                ", isEnabled=" + isEnabled +
-                '}';
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

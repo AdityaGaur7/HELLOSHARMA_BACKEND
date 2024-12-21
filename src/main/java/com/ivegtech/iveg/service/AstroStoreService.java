@@ -1,12 +1,12 @@
 package com.ivegtech.iveg.service;
 
+import com.ivegtech.iveg.entity.AstroStore;
+import com.ivegtech.iveg.repo.AstroStoreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ivegtech.iveg.entity.AstroStore;
-import com.ivegtech.iveg.repo.AstroStoreRepository;
-
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AstroStoreService {
@@ -14,33 +14,39 @@ public class AstroStoreService {
     @Autowired
     private AstroStoreRepository astroStoreRepository;
 
-    public List<AstroStore> getAllProducts() {
+    // Retrieve all AstroStore items
+    public List<AstroStore> getAllAstroStores() {
         return astroStoreRepository.findAll();
     }
 
-    public AstroStore getProductById(Long id) {
-        return astroStoreRepository.findById(id).orElse(null);
+    // Retrieve an AstroStore item by ID
+    public Optional<AstroStore> getAstroStoreById(Long id) {
+        return astroStoreRepository.findById(id);
     }
 
-    public AstroStore createProduct(AstroStore product) {
-        return astroStoreRepository.save(product);
+    // Add a new AstroStore item
+    public AstroStore addAstroStore(AstroStore astroStore) {
+        return astroStoreRepository.save(astroStore);
     }
 
-    public AstroStore updateProduct(Long id, AstroStore productDetails) {
-        AstroStore product = getProductById(id);
-        if (product != null) {
-            product.setTitle(productDetails.getTitle());
-            product.setDescription(productDetails.getDescription());
-            product.setPrice(productDetails.getPrice());
-            product.setImage(productDetails.getImage());
-            product.setLink(productDetails.getLink());
-            product.setTag(productDetails.getTag());
-            return astroStoreRepository.save(product);
+    // Update an existing AstroStore item
+    public AstroStore updateAstroStore(Long id, AstroStore astroStoreDetails) {
+        return astroStoreRepository.findById(id).map(astroStore -> {
+            astroStore.setTitle(astroStoreDetails.getTitle());
+            astroStore.setDescription(astroStoreDetails.getDescription());
+            astroStore.setPrice(astroStoreDetails.getPrice());
+            astroStore.setImage(astroStoreDetails.getImage());
+            astroStore.setLink(astroStoreDetails.getLink());
+            astroStore.setTag(astroStoreDetails.getTag());
+            return astroStoreRepository.save(astroStore);
+        }).orElseThrow(() -> new RuntimeException("AstroStore with ID " + id + " not found"));
+    }
+
+    // Delete an AstroStore item by ID
+    public void deleteAstroStore(Long id) {
+        if (!astroStoreRepository.existsById(id)) {
+            throw new RuntimeException("AstroStore with ID " + id + " not found");
         }
-        return null;
-    }
-
-    public void deleteProduct(Long id) {
         astroStoreRepository.deleteById(id);
     }
 }
