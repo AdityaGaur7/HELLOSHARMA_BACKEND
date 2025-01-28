@@ -12,17 +12,15 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        // This endpoint will be used by clients to connect to the WebSocket server
-    	registry.addEndpoint("/chat-websocket-native")
-        .setAllowedOrigins("*");
+        registry.addEndpoint("/ws")
+                .setAllowedOriginPatterns("*")
+                .withSockJS();
     }
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        // Messages with destination starting with /app will be routed to message-handling methods
         registry.setApplicationDestinationPrefixes("/app");
-        // Enable a simple memory-based message broker to send messages to clients
-        // on destinations prefixed with /topic
-        registry.enableSimpleBroker("/topic");
+        registry.enableSimpleBroker("/chat");
+        registry.setUserDestinationPrefix("/user");
     }
-}
+} 

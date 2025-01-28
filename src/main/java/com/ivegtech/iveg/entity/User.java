@@ -1,7 +1,9 @@
 package com.ivegtech.iveg.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "user_details", schema = "public")
@@ -50,6 +52,13 @@ public class User implements Serializable {
     private String status;
     private String imageUrl;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL)
+    private List<ChatMessage> sentMessages;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL)
+    private List<ChatMessage> receivedMessages;
     
     // Constructors, Getters, Setters, and toString() methods
 
@@ -196,5 +205,21 @@ public class User implements Serializable {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public List<ChatMessage> getSentMessages() {
+        return sentMessages;
+    }
+
+    public void setSentMessages(List<ChatMessage> sentMessages) {
+        this.sentMessages = sentMessages;
+    }
+
+    public List<ChatMessage> getReceivedMessages() {
+        return receivedMessages;
+    }
+
+    public void setReceivedMessages(List<ChatMessage> receivedMessages) {
+        this.receivedMessages = receivedMessages;
     }
 }
